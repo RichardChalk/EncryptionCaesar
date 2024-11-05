@@ -24,6 +24,7 @@
 
             string encryptedMessage = "";
 
+            // Enkrypterar en bokstav i taget
             for (int index = 0; index < message.Length; index++)
             {
                 char encryptedLetter = RunEncryption(message[index], key);
@@ -39,15 +40,31 @@
         private static char RunEncryption(char letter, int key)
         {
             // Vi tittar endast på A-Z
+            // Den här raden ser till att endast bokstäver mellan A och Z behandlas.
+            // Om bokstaven letter inte är inom detta intervall,
+            // returneras bokstaven som den är utan förändring.
             if (letter < 'A' || letter > 'Z') { return letter; }
 
             // Klura ut vilken bokstav det är
+            // Här omvandlas bokstaven till en siffra som är lättare att jobba med.
+            // Genom att subtrahera 'A' från letter, får vi en siffra mellan 0 och 25
+            // där A motsvarar 0, B motsvarar 1, och så vidare.
+            // Om letter är "I", får vi siffran 8
+            // (eftersom "I" är den nionde bokstaven i alfabetet, men vi börjar räkna från 0).
             int letterAsNumber = (int)letter - 'A';
 
-            // Gör själva decryption.
+            // Här utförs krypteringen.
+            // Genom att lägga till nyckeln (key) till letterAsNumber, förskjuts bokstaven
+            // framåt i alfabetet. Sedan används % 26 för att "wrap-around" när vi kommer
+            // till slutet av alfabetet (detta håller oss inom intervallet 0-25).
+            // För "I" (värde 8) och en nyckel på 3, blir resultatet (8 + 3) % 26 = 11,
+            // vilket motsvarar "L".
             int encryptedLetter = (letterAsNumber + key) % 26;
 
-            // Konvertera tillbaks till en bokstav
+            // Här omvandlas det krypterade talet tillbaka till en bokstav.
+            // Genom att lägga till 'A' till encryptedLetter får vi rätt bokstav
+            // i ASCII-tabellen.
+            // För 11 blir det alltså "L".
             return (char)(encryptedLetter + 'A');
         }
     }
